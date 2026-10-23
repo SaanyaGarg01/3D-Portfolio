@@ -492,6 +492,31 @@ export default function WorldOverlay() {
                   GitHub
                 </a>
               </div>
+
+              {/* Direct Resume PDF Link */}
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noreferrer"
+                download="Saanya_Garg_Resume.pdf"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8,
+                  padding: '10px 14px',
+                  background: 'rgba(255, 255, 255, 0.14)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  borderRadius: 8,
+                  color: '#ffffff',
+                  textDecoration: 'none',
+                  fontSize: 12.5,
+                  fontWeight: 600,
+                  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
+                }}
+              >
+                <span>Download Saanya's Resume (PDF)</span>
+              </a>
             </div>
 
             <button

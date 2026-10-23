@@ -176,23 +176,26 @@ export default function OpeningHeroOverlay({ phase, onStartJourney }: OpeningHer
                 href="/resume.pdf"
                 target="_blank"
                 rel="noreferrer"
+                download="Saanya_Garg_Resume.pdf"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: 6,
-                  padding: '10px 14px',
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  border: '1px solid rgba(255, 255, 255, 0.16)',
+                  padding: '11px 16px',
+                  background: 'rgba(255, 255, 255, 0.12)',
+                  border: '1px solid rgba(255, 255, 255, 0.28)',
                   borderRadius: 8,
                   color: '#ffffff',
-                  fontSize: 12,
+                  fontSize: 12.5,
+                  fontWeight: 600,
                   fontFamily: '"Space Grotesk", sans-serif',
                   textDecoration: 'none',
+                  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
                   transition: 'all 0.2s ease',
                 }}
               >
-                <FileText size={14} />
-                <span>Resume</span>
+                <FileText size={15} color="#38bdf8" />
+                <span>Resume (PDF)</span>
               </a>
 
               <a
