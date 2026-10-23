@@ -1,0 +1,491 @@
+/* Sébastien Lempens inspired Preloader, Awards & Cookie styles */
+
+:root {
+  --france-color: #0f1015;
+  --france-light: #e4e4e4;
+  --luxembourg-color: #12131a;
+  --belgium-color: #141215;
+  --accent-plum: #8b7082;
+  --accent-border: #d3b3c9;
+  --accent-plum-hover: #5c4655;
+  --accent-blue: #2563eb;
+  --accent-blue-border: #60a5fa;
+}
+
+#preloader {
+  --progress: 0;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--france-color);
+  z-index: 999999;
+  display: grid;
+  place-content: center;
+  overflow: hidden;
+  user-select: none;
+  transition: opacity 800ms ease, background-color 600ms ease;
+}
+
+#preloader.preloader--france {
+  background-color: var(--france-color);
+}
+
+#preloader.preloader--light {
+  background-color: var(--france-light);
+  color: #1a1a1a;
+}
+
+#preloader.preloader--light code {
+  color: #000000;
+  opacity: 0.08;
+}
+
+#preloader.preloader--light .city {
+  filter: invert(1);
+  opacity: 0.35;
+}
+
+#preloader code {
+  display: block;
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Zen Dots", sans-serif;
+  font-size: clamp(80px, 18vmin, 200px);
+  letter-spacing: 0.15em;
+  color: #ffffff;
+  opacity: 0.05;
+  pointer-events: none;
+  transition: opacity 1200ms ease;
+  line-height: 1;
+}
+
+/* Motorcycle container */
+#preloader > div.motorbike {
+  position: relative;
+  z-index: 2;
+  left: 0;
+  top: -45px;
+  opacity: 0;
+  transform-origin: center bottom;
+  transform: scale(0.85);
+  transition: opacity 600ms cubic-bezier(0.22, 0.61, 0.36, 1), left 600ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  pointer-events: none;
+}
+
+#preloader > div.motorbike::after,
+#preloader > div.motorbike::before {
+  content: "";
+  display: block;
+  width: 88px;
+  height: 88px;
+  position: absolute;
+  z-index: 0;
+  bottom: -20px;
+  background-image: url("/image/motorbike-wheel.svg");
+  background-size: contain;
+  background-repeat: no-repeat;
+  animation: wheelAnimation 220ms linear infinite;
+}
+
+#preloader > div.motorbike::after {
+  left: 10px;
+}
+
+#preloader > div.motorbike::before {
+  right: -10px;
+}
+
+#preloader > div.motorbike > img {
+  animation: motocycleAnimation 15ms infinite linear;
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+#preloader > div.motorbike.active {
+  opacity: 1;
+  left: 0;
+}
+
+/* Scrolling City Skyline */
+#preloader > .city {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 1000px;
+  height: 186px;
+  background-image: url("/image/city.svg");
+  mask: radial-gradient(circle, black 30%, transparent 75%);
+  -webkit-mask: radial-gradient(circle, black 30%, transparent 75%);
+  opacity: 0.28;
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  animation: cityAnimation 5s linear infinite;
+  transition: opacity 1200ms cubic-bezier(0.22, 0.61, 0.36, 1) 450ms;
+  pointer-events: none;
+}
+
+/* Preloader Enter Prompt */
+#preloader > .preloader-enter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  pointer-events: auto;
+}
+
+#preloader > .preloader-enter::before {
+  content: "";
+  display: block;
+  width: 250px;
+  height: 105px;
+  transform: translateY(5px);
+  background-image: url("/image/preload-monuments.svg");
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  margin: 0 auto;
+  transition: clip-path 600ms cubic-bezier(0.16, 1, 0.3, 1) 50ms, opacity 600ms ease;
+  clip-path: inset(0 0 0 100%);
+  -webkit-clip-path: inset(0 0 0 100%);
+  animation: monumentsAnimation 8s linear infinite;
+  opacity: 0.9;
+}
+
+/* Button Start */
+#preloader > .preloader-enter > .button-start {
+  display: inline-block;
+  position: relative;
+  border: 2px solid var(--accent-border);
+  min-width: 260px;
+  background: var(--accent-plum);
+  text-transform: uppercase;
+  color: white;
+  border-radius: 4px;
+  padding: 12px 32px;
+  font-size: 1.5rem;
+  font-family: "Zen Dots", sans-serif;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  margin: 12px auto 0;
+  text-align: center;
+  text-decoration: none;
+  pointer-events: auto;
+  clip-path: inset(0 100% 0 0);
+  -webkit-clip-path: inset(0 100% 0 0);
+  transition: clip-path 600ms cubic-bezier(0.16, 1, 0.3, 1) 50ms, background-color 300ms ease, transform 200ms ease, box-shadow 300ms ease;
+  box-shadow: 0 4px 20px rgba(139, 112, 130, 0.4);
+}
+
+#preloader > .preloader-enter > .button-start::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -115px;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(ellipse at center, rgba(240, 239, 240, 0.8) -60%, transparent 60%) padding-box;
+  mix-blend-mode: plus-lighter;
+  opacity: 0.65;
+  transform: translateX(-50%) scale(1.5);
+  pointer-events: none;
+}
+
+#preloader > .preloader-enter > .button-start:hover {
+  background-color: var(--accent-plum-hover);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(139, 112, 130, 0.6);
+}
+
+#preloader > .preloader-enter > .button-start:active {
+  transform: translateY(0);
+}
+
+/* Prompt instructions */
+#preloader > .preloader-enter > p {
+  clip-path: inset(0 100% 0 0);
+  -webkit-clip-path: inset(0 100% 0 0);
+  transition: clip-path 600ms cubic-bezier(0.16, 1, 0.3, 1) 100ms;
+  font-size: 0.85rem;
+  margin: 6px 0;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(240, 236, 228, 0.7);
+  font-family: "Space Mono", monospace;
+}
+
+#preloader > .preloader-enter > p:nth-of-type(1) {
+  margin-top: 24px;
+  color: rgba(240, 236, 228, 0.95);
+  font-weight: 500;
+}
+
+/* Progress bar inside preloader */
+.preloader-progress-track {
+  position: absolute;
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  transition: opacity 600ms ease;
+}
+
+.preloader-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #8b7082, #d3b3c9);
+  transition: width 150ms ease-out;
+}
+
+/* When loading completes, transition into ready/end state */
+#preloader.end > div.motorbike {
+  transition-duration: 1200ms;
+  left: 420px;
+  opacity: 0;
+}
+
+#preloader.end code {
+  opacity: 0;
+}
+
+#preloader.end > .city {
+  opacity: 0;
+}
+
+#preloader.end .preloader-progress-track {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#preloader.end > .preloader-enter::before {
+  opacity: 0.9;
+  clip-path: inset(0 0 0 0);
+  -webkit-clip-path: inset(0 0 0 0);
+}
+
+#preloader.end > .preloader-enter > .button-start {
+  clip-path: inset(0 0 0 0);
+  -webkit-clip-path: inset(0 0 0 0);
+}
+
+#preloader.end > .preloader-enter > p {
+  clip-path: inset(0 0 0 0);
+  -webkit-clip-path: inset(0 0 0 0);
+}
+
+/* Final departure animation when START is clicked */
+#preloader.departing {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#preloader.departing > .preloader-enter {
+  opacity: 0;
+  transform: translate(-50%, -60%);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+/* Awards ribbon */
+#awards {
+  position: fixed;
+  width: 100%;
+  bottom: 8dvh;
+  left: 0;
+  z-index: 9999999;
+  pointer-events: auto;
+  transition: opacity 1000ms ease, transform 1000ms ease;
+}
+
+#awards > div {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  justify-content: center;
+  padding: 10px 24px;
+  margin: 0 auto;
+  max-width: fit-content;
+  border-radius: 40px;
+  background: rgba(13, 13, 17, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+#awards a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 300ms ease, filter 300ms ease;
+  filter: grayscale(0.2) opacity(0.85);
+}
+
+#awards a:hover {
+  transform: translateY(-4px) scale(1.08);
+  filter: grayscale(0) opacity(1) drop-shadow(0 0 12px rgba(96, 165, 250, 0.5));
+}
+
+#awards.end {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+/* Cookie consent modal */
+#cookie {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(10, 11, 15, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: white;
+  padding: 16px 24px;
+  text-align: center;
+  z-index: 999999999;
+  transform: translateY(100%);
+  transition: transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+#cookie.visible {
+  transform: translateY(0);
+}
+
+#cookie.disabled {
+  transform: translateY(100%) !important;
+}
+
+#cookie p {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: rgba(240, 236, 228, 0.8);
+  max-width: 780px;
+  text-wrap: balance;
+}
+
+.cookie-cta {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+#cookie button {
+  font-family: "Zen Dots", sans-serif;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 8px 24px;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 300ms ease;
+}
+
+#cookie button.cookie-cta-accept {
+  background-color: var(--accent-plum);
+  border-color: var(--accent-border);
+}
+
+#cookie button:hover {
+  background-color: var(--accent-plum-hover);
+  border-color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Animations from user's snippet */
+@keyframes motocycleAnimation {
+  from {
+    transform: scaleY(0.98);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes cityAnimation {
+  to {
+    background-position-x: -2000px;
+  }
+}
+
+@keyframes wheelAnimation {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes monumentsAnimation {
+  to {
+    background-position-x: calc((80px * 3) * -1);
+  }
+}
+
+/* Mobile responsive optimizations */
+@media screen and (max-width: 600px) {
+  #preloader > .city {
+    top: 40dvh;
+    width: 600px;
+  }
+  #preloader code {
+    font-size: 28vmin;
+  }
+  #preloader > div.motorbike {
+    transform: scale(0.65);
+    top: -95px;
+  }
+  #preloader > .preloader-enter {
+    width: 90vw;
+  }
+  #preloader > .preloader-enter::before {
+    width: 100%;
+    max-width: 220px;
+  }
+  #preloader > .preloader-enter > .button-start {
+    min-width: 80vw;
+    font-size: 1.2rem;
+  }
+  #preloader > .preloader-enter > p {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+  #awards {
+    bottom: 2dvh;
+  }
+  #awards > div {
+    gap: 16px;
+    padding: 8px 16px;
+    transform: scale(0.85);
+  }
+  #cookie p {
+    font-size: 0.75rem;
+  }
+  #cookie button {
+    font-size: 0.72rem;
+    padding: 6px 16px;
+  }
+}

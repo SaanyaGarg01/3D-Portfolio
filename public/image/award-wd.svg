@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 98 31" width="98" height="31">
+  <rect x="1" y="1" width="96" height="29" rx="3" fill="#18181c" stroke="#334155" stroke-width="1.2"/>
+  <rect x="5" y="4" width="23" height="23" rx="2" fill="#0f172a" stroke="#60a5fa" stroke-width="1"/>
+  <text x="16.5" y="19" font-family="'Space Grotesk', sans-serif" font-weight="900" font-size="11" fill="#38bdf8" text-anchor="middle">WD</text>
+  <text x="34" y="15" font-family="'Space Grotesk', sans-serif" font-weight="700" font-size="8" fill="#f8fafc">WD AWARDS</text>
+  <text x="34" y="23" font-family="'Space Mono', monospace" font-size="6" fill="#94a3b8" letter-spacing="0.5">EXCELLENCE</text>
+</svg>

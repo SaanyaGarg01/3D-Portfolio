@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 88" width="88" height="88">
+  <circle cx="44" cy="44" r="42" fill="#18181c" stroke="#2c2c34" stroke-width="2"/>
+  <!-- Tire treads -->
+  <g stroke="#3a3a46" stroke-width="2" stroke-linecap="round">
+    <line x1="44" y1="2" x2="44" y2="7"/>
+    <line x1="44" y1="81" x2="44" y2="86"/>
+    <line x1="2" y1="44" x2="7" y2="44"/>
+    <line x1="81" y1="44" x2="86" y2="44"/>
+    <line x1="14" y1="14" x2="18" y2="18"/>
+    <line x1="70" y1="70" x2="74" y2="74"/>
+    <line x1="14" y1="74" x2="18" y2="70"/>
+    <line x1="70" y1="18" x2="74" y2="14"/>
+  </g>
+  <!-- Rim -->
+  <circle cx="44" cy="44" r="33" fill="none" stroke="#60a5fa" stroke-width="2.5" opacity="0.8"/>
+  <circle cx="44" cy="44" r="28" fill="#121216" stroke="#3b82f6" stroke-width="1.5"/>
+  <!-- Spokes -->
+  <g stroke="#93c5fd" stroke-width="1.5" opacity="0.75">
+    <line x1="44" y1="16" x2="44" y2="72"/>
+    <line x1="16" y1="44" x2="72" y2="44"/>
+    <line x1="24" y1="24" x2="64" y2="64"/>
+    <line x1="24" y1="64" x2="64" y2="24"/>
+    <line x1="30" y1="18" x2="58" y2="70"/>
+    <line x1="58" y1="18" x2="30" y2="70"/>
+  </g>
+  <!-- Brake disc holes -->
+  <circle cx="44" cy="44" r="18" fill="#202028" stroke="#4b5563" stroke-width="1"/>
+  <!-- Hub -->
+  <circle cx="44" cy="44" r="9" fill="#3b82f6"/>
+  <circle cx="44" cy="44" r="4" fill="#ffffff"/>
+</svg>

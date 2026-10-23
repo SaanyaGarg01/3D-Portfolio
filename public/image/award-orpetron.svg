@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 68 69" width="68" height="69">
+  <circle cx="34" cy="34.5" r="30" fill="#18181c" stroke="#3b82f6" stroke-width="1.5"/>
+  <circle cx="34" cy="34.5" r="25" fill="none" stroke="#2563eb" stroke-width="1"/>
+  <polygon points="34,14 38,25 49,25 40,32 44,43 34,36 24,43 28,32 19,25 30,25" fill="#f59e0b" opacity="0.9"/>
+  <text x="34" y="52" font-family="'Space Grotesk', sans-serif" font-weight="800" font-size="6" fill="#f8fafc" text-anchor="middle" letter-spacing="1">ORPETRON</text>
+  <text x="34" y="59" font-family="'Space Mono', monospace" font-size="4" fill="#93c5fd" text-anchor="middle">SITE OF DAY</text>
+</svg>
