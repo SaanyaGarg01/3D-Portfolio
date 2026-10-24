@@ -34,18 +34,18 @@ export default function App() {
   const [viewMode, setViewMode] = useState<'3d' | 'editorial'>('3d')
 
   useEffect(() => {
+    audioEngine.setupAutoUnlock()
     return journeyStore.subscribe(setJState)
   }, [])
 
-  const handlePreloaderComplete = (soundChoice = true) => {
+  const handlePreloaderComplete = (_soundChoice = true) => {
     setIsLoading(false)
-    if (soundChoice) {
-      audioEngine.enable()
-      journeyStore.setState({ soundEnabled: true, sunoPlayerOpen: true })
-    }
+    audioEngine.enable()
+    journeyStore.setState({ soundEnabled: true, sunoPlayerOpen: true })
   }
 
   const handleStartJourney = () => {
+    audioEngine.enable()
     journeyStore.startMounting()
     journeyStore.toggleSunoPlayer(true)
   }

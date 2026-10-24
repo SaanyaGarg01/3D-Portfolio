@@ -33,16 +33,6 @@ export default function JourneyHUD() {
 
   if (state.phase === 'opening') return null
 
-  const handleToggleSound = () => {
-    if (state.soundEnabled) {
-      audioEngine.disable()
-      journeyStore.setState({ soundEnabled: false })
-    } else {
-      audioEngine.enable()
-      journeyStore.setState({ soundEnabled: true })
-    }
-  }
-
   // Check if at junction (Z around -1550, progress 0.46 to 0.52)
   const isAtJunction = state.progress >= 0.46 && state.progress <= 0.52
 
@@ -224,42 +214,6 @@ export default function JourneyHUD() {
             </span>
           </button>
 
-          {/* Sound Equalizer Bars */}
-          <button
-            onClick={handleToggleSound}
-            style={{
-              background: 'none',
-              border: 'none',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 4,
-              cursor: 'pointer',
-              color: '#ffffff',
-              padding: 4,
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 3, height: 16 }}>
-              <motion.div
-                animate={{ height: state.soundEnabled ? [6, 16, 8, 14] : 4 }}
-                transition={{ repeat: Infinity, duration: 0.8, ease: 'easeInOut' }}
-                style={{ width: 2.5, background: '#ffffff', borderRadius: 1 }}
-              />
-              <motion.div
-                animate={{ height: state.soundEnabled ? [14, 8, 16, 10] : 8 }}
-                transition={{ repeat: Infinity, duration: 0.6, ease: 'easeInOut' }}
-                style={{ width: 2.5, background: '#ffffff', borderRadius: 1 }}
-              />
-              <motion.div
-                animate={{ height: state.soundEnabled ? [10, 15, 6, 16] : 5 }}
-                transition={{ repeat: Infinity, duration: 0.7, ease: 'easeInOut' }}
-                style={{ width: 2.5, background: '#ffffff', borderRadius: 1 }}
-              />
-            </div>
-            <span style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 10, letterSpacing: '0.15em', marginTop: 3 }}>
-              sound
-            </span>
-          </button>
 
           {/* Suno Soundtrack Quick Trigger */}
           <button

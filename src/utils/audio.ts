@@ -146,15 +146,12 @@ class AudioEngine {
       this.masterGain.gain.exponentialRampToValueAtTime(1.0, now + 0.6)
     }
 
-    // Auto-start layers
-    this.startBackgroundMusic()
+    // Default music is Suno soundtrack exclusively (no synth chords)
     this.startAmbient()
-
-    if (this.customAudio && this.customAudioLoaded) {
-      this.customAudio.volume = 0.35
+    this.initCustomAudio()
+    if (this.customAudio) {
+      this.customAudio.volume = 0.55
       this.customAudio.play().catch(() => {})
-    } else {
-      this.initCustomAudio()
     }
   }
 
@@ -180,7 +177,6 @@ class AudioEngine {
 
     // Stop everything after fade
     setTimeout(() => {
-      this.stopBackgroundMusic()
       this.stopAmbient()
       this.stopEngine()
     }, 600)
@@ -192,8 +188,7 @@ class AudioEngine {
       if (!this.customAudio) {
         this.customAudio = new Audio(src)
         this.customAudio.loop = true
-        this.customAudio.crossOrigin = 'anonymous'
-        this.customAudio.volume = 0.35
+        this.customAudio.volume = 0.55
         this.customAudio.addEventListener('canplaythrough', () => {
           this.customAudioLoaded = true
           if (this.enabled) {
@@ -201,10 +196,26 @@ class AudioEngine {
           }
         })
         this.customAudio.addEventListener('error', () => {
-          this.customAudioLoaded = false
+          if (src === '/music.mp3') {
+            this.customAudio = null
+            this.initCustomAudio('/saanya_theme.m4a')
+          }
         })
       }
+      if (this.enabled && this.customAudio) {
+        this.customAudio.play().catch(() => {})
+      }
     } catch {}
+  }
+
+  public setupAutoUnlock() {
+    if (typeof window === 'undefined') return
+    const unlock = () => {
+      this.enable()
+    }
+    window.addEventListener('click', unlock, { once: true, passive: true })
+    window.addEventListener('touchstart', unlock, { once: true, passive: true })
+    window.addEventListener('keydown', unlock, { once: true, passive: true })
   }
 
   // ── Background Music Layer ──────────────────────
@@ -212,31 +223,10 @@ class AudioEngine {
   // with a gentle arpeggio melody layer on top.
 
   public startBackgroundMusic() {
-    if (!this.enabled) return
-    this.initContext()
-    if (!this.ctx || !this.bgMusicGain || this.bgMusicPlaying) return
-    this.bgMusicPlaying = true
-
-    const now = this.ctx.currentTime
-
-    // Fade in bg music bus
-    this.bgMusicGain.gain.cancelScheduledValues(now)
-    this.bgMusicGain.gain.setValueAtTime(0.0001, now)
-    this.bgMusicGain.gain.exponentialRampToValueAtTime(0.12, now + 2.0)
-
-    // Start initial chord
-    this.chordIndex = 0
-    this.playChord(this.chordIndex)
-
-    // Start bass drone
-    this.startBassDrone()
-
-    // Chord progression: advance every 4 seconds
-    this.melodyInterval = setInterval(() => {
-      this.chordIndex = (this.chordIndex + 1) % this.CHORD_PROGRESSION.length
-      this.crossfadeChord(this.chordIndex)
-      this.playMelodyNote()
-    }, 4000)
+    this.initCustomAudio()
+    if (this.customAudio && this.enabled) {
+      this.customAudio.play().catch(() => {})
+    }
   }
 
   private playChord(index: number) {

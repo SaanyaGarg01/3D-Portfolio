@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, Play, RotateCcw, Volume2, VolumeX, Compass } from 'lucide-react'
+import { X, Play, RotateCcw, Compass } from 'lucide-react'
 import { journeyStore, type JourneyState } from '../game/journeyStore'
 import { WORLDS } from '../game/types'
-import { audioEngine } from '../../utils/audio'
 
 export default function JourneyMenu() {
   const [jState, setJState] = useState<JourneyState>(() => journeyStore.getState())
@@ -13,16 +12,6 @@ export default function JourneyMenu() {
   }, [])
 
   if (!jState.isMenuOpen) return null
-
-  const handleToggleSound = () => {
-    if (jState.soundEnabled) {
-      audioEngine.disable()
-      journeyStore.setState({ soundEnabled: false })
-    } else {
-      audioEngine.enable()
-      journeyStore.setState({ soundEnabled: true })
-    }
-  }
 
   return (
     <AnimatePresence>
@@ -126,23 +115,6 @@ export default function JourneyMenu() {
               }}
             >
               <RotateCcw size={15} /> Restart
-            </button>
-
-            <button
-              onClick={handleToggleSound}
-              style={{
-                padding: '12px 18px',
-                background: 'rgba(255, 255, 255, 0.08)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
-                borderRadius: 8,
-                color: jState.soundEnabled ? 'var(--color-blue-glow)' : 'rgba(240, 236, 228, 0.6)',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              {jState.soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
             </button>
           </div>
 
