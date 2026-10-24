@@ -126,11 +126,45 @@ export default function ChapterHero({ onEnter, onChapterChange }: Omit<Props, 'h
         Computer Science Engineering · VIT Bhopal · CGPA 9.19
       </motion.p>
 
+      {/* Intro Video Showcase */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 30 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ delay: 1.4, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        style={{
+          width: '100%',
+          maxWidth: 620,
+          aspectRatio: '16/9',
+          borderRadius: 16,
+          overflow: 'hidden',
+          position: 'relative',
+          marginBottom: 48,
+          border: '1px solid rgba(240, 236, 228, 0.15)',
+          boxShadow: '0 24px 60px rgba(0,0,0,0.5)',
+          background: '#ffffff',
+        }}
+      >
+        <video
+          src="/intro.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          controls
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            display: 'block',
+          }}
+        />
+      </motion.div>
+
       {/* CTA buttons */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.5, duration: 0.8 }}
+        transition={{ delay: 1.6, duration: 0.8 }}
         style={{
           display: 'flex',
           gap: 16,

@@ -23,10 +23,30 @@ function CategoryHeader({ icon: Icon, title, subtitle }: { icon: any; title: str
         <Icon size={17} />
       </div>
       <div>
-        <h2 style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 17, fontWeight: 700, margin: 0, color: '#ffffff', letterSpacing: '-0.01em' }}>
+        <h2
+          style={{
+            fontFamily: '"Space Grotesk", sans-serif',
+            fontSize: 'clamp(18px, 1.8vw, 22px)',
+            fontWeight: 800,
+            margin: 0,
+            color: '#ffffff',
+            letterSpacing: '-0.02em',
+            textShadow: '0 2px 12px rgba(0, 0, 0, 0.85)',
+          }}
+        >
           {title}
         </h2>
-        <div style={{ fontSize: 11, color: '#38bdf8', letterSpacing: '0.04em', fontFamily: '"Space Grotesk", sans-serif' }}>
+        <div
+          style={{
+            fontSize: 11.5,
+            color: '#38bdf8',
+            letterSpacing: '0.06em',
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            fontFamily: '"Space Grotesk", sans-serif',
+            marginTop: 2,
+          }}
+        >
           {subtitle}
         </div>
       </div>
@@ -35,15 +55,15 @@ function CategoryHeader({ icon: Icon, title, subtitle }: { icon: any; title: str
 }
 
 const cardStyle: React.CSSProperties = {
-  background: 'rgba(15, 12, 22, 0.72)',
-  backdropFilter: 'blur(28px)',
-  WebkitBackdropFilter: 'blur(28px)',
-  border: '1px solid rgba(255, 255, 255, 0.16)',
-  borderRadius: 14,
+  background: 'rgba(10, 15, 28, 0.92)',
+  backdropFilter: 'blur(32px)',
+  WebkitBackdropFilter: 'blur(32px)',
+  border: '1.5px solid rgba(56, 189, 248, 0.35)',
+  borderRadius: 16,
   padding: 'clamp(20px, 3vw, 28px)',
   pointerEvents: 'auto',
   color: '#ffffff',
-  boxShadow: '0 24px 60px rgba(0, 0, 0, 0.45)',
+  boxShadow: '0 24px 70px rgba(0, 0, 0, 0.75), 0 0 35px rgba(56, 189, 248, 0.12)',
   maxHeight: '74vh',
   overflowY: 'auto',
   fontFamily: '"Space Grotesk", sans-serif',
@@ -397,7 +417,7 @@ export default function WorldOverlay() {
         )}
 
         {/* =========================================================
-            WORLD 8 · CONTACT & HORIZON
+            WORLD 8 · JOURNEY COMPLETE & CONTACT HORIZON
         ========================================================= */}
         {worldIndex === 8 && (
           <motion.div
@@ -408,10 +428,27 @@ export default function WorldOverlay() {
             transition={{ duration: 0.4 }}
             style={cardStyle}
           >
-            <CategoryHeader icon={Sparkles} title="Get in Touch" subtitle="LET'S BUILD SOMETHING EXTRAORDINARY" />
+            <CategoryHeader icon={Sparkles} title="Journey Complete" subtitle="HORIZON REACHED · SUMMARY OF ADVENTURE" />
 
-            <p style={{ fontSize: 13, lineHeight: 1.6, color: 'rgba(255, 255, 255, 0.85)', margin: '0 0 14px' }}>
-              Thank you for riding with me through Paris! I am actively looking for full-stack, cloud, and software engineering opportunities.
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 14 }}>
+              <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 8, padding: '8px 4px', textAlign: 'center' }}>
+                <div style={{ fontSize: 15, fontWeight: 800, color: '#38bdf8' }}>3.2 km</div>
+                <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.6)' }}>Distance</div>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 8, padding: '8px 4px', textAlign: 'center' }}>
+                <div style={{ fontSize: 15, fontWeight: 800, color: '#f59e0b' }}>
+                  {jState.collectedSparks.length} / 8
+                </div>
+                <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.6)' }}>Sparks Collected</div>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 8, padding: '8px 4px', textAlign: 'center' }}>
+                <div style={{ fontSize: 15, fontWeight: 800, color: '#34d399' }}>8 / 8</div>
+                <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.6)' }}>Milestones</div>
+              </div>
+            </div>
+
+            <p style={{ fontSize: 12.5, lineHeight: 1.55, color: 'rgba(255, 255, 255, 0.85)', margin: '0 0 14px' }}>
+              You have completed the cinematic journey through Saanya Garg's interactive world! From B.Tech at VIT Bhopal to 3 industry internships, dual AWS certifications, and state hackathon victories.
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>

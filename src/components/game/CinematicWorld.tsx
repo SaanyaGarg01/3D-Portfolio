@@ -8,6 +8,9 @@ import Motorcycle3D from './Motorcycle3D'
 import ParisCity3D from './ParisCity3D'
 import Environment3D from './Environment3D'
 import CameraController from './CameraController'
+import CinematicEventsManager from './CinematicEventsManager'
+import ByteRobot3D from './ByteRobot3D'
+import RoadsideCharacters3D from './RoadsideCharacters3D'
 import { audioEngine } from '../../utils/audio'
 
 export default function CinematicWorld() {
@@ -269,6 +272,7 @@ export default function CinematicWorld() {
         steerAngle={steerRef.current}
         leanAngle={leanRef.current}
         speed={currentSpeed}
+        cinematicMode={jState.cinematicCameraMode}
       />
 
       {/* Parisian Sunset Atmosphere, Lighting & Fog */}
@@ -276,6 +280,17 @@ export default function CinematicWorld() {
 
       {/* Parisian 3D Architecture with Distance Culling */}
       <ParisCity3D currentZ={zPosRef.current} />
+
+      {/* Cinematic Events & Transitions Between Milestones */}
+      <CinematicEventsManager bikePosition={currentBikePos} speed={currentSpeed} />
+
+      {/* Roadside 3D Character Cast */}
+      <RoadsideCharacters3D bikePosition={currentBikePos} />
+
+      {/* Floating Robot Companion Byte */}
+      {jState.phase !== 'opening' && (
+        <ByteRobot3D bikePosition={currentBikePos} mood={jState.byteMood} />
+      )}
 
       {/* Character & Vintage Scooter (Driven smoothly by bikeGroupRef) */}
       <group ref={bikeGroupRef} position={currentBikePos}>

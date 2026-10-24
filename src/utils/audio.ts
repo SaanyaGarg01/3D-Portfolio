@@ -1,6 +1,6 @@
 /**
- * Web Audio Ambient & Motorcycle Sound Generator
- * Generates cinematic ambient music, engine throttle, and UI audio without external audio dependencies.
+ * Web Audio Ambient & Corporate Music Sound Generator
+ * Generates cinematic ambient music, warm corporate background music, engine throttle, and UI audio.
  */
 
 class AudioEngine {
@@ -13,6 +13,12 @@ class AudioEngine {
   private engineGain: GainNode | null = null
   private engineOsc: OscillatorNode | null = null
   private engineFilter: BiquadFilterNode | null = null
+
+  // Background Corporate Music Nodes (Warm Piano + Soft Ambient Pad)
+  private bgMusicGain: GainNode | null = null
+  private bgMusicOscs: OscillatorNode[] = []
+  private bgMusicPlaying = false
+  private bgMusicTimer: number | null = null
 
   private initContext() {
     if (!this.ctx) {
@@ -27,6 +33,95 @@ class AudioEngine {
     }
   }
 
+  /**
+   * Warm, uplifting, modern corporate background music
+   * Balanced at 8–12% perceived mix beneath spoken narration
+   */
+  public startCorporateMusic(targetVolume = 0.10) {
+    this.initContext()
+    if (!this.ctx || this.bgMusicPlaying) return
+    this.bgMusicPlaying = true
+
+    const now = this.ctx.currentTime
+
+    this.bgMusicGain = this.ctx.createGain()
+    // 1.5s gentle fade in
+    this.bgMusicGain.gain.setValueAtTime(0.0001, now)
+    this.bgMusicGain.gain.exponentialRampToValueAtTime(targetVolume, now + 1.5)
+    this.bgMusicGain.connect(this.ctx.destination)
+
+    // Soft warm chords (C major 9th progression: C3, G3, E4, B4, D5)
+    const chordPitches = [130.81, 196.00, 329.63, 493.88, 587.33]
+
+    this.bgMusicOscs = chordPitches.map((freq, idx) => {
+      const osc = this.ctx!.createOscillator()
+      const gain = this.ctx!.createGain()
+      const filter = this.ctx!.createBiquadFilter()
+
+      // Warm sine / gentle triangle texture
+      osc.type = idx % 2 === 0 ? 'sine' : 'triangle'
+      osc.frequency.setValueAtTime(freq, now)
+
+      // Gentle lowpass filter for warm acoustic character
+      filter.type = 'lowpass'
+      filter.frequency.setValueAtTime(650 + idx * 80, now)
+
+      // Soft envelope
+      gain.gain.setValueAtTime(0.05 / (idx + 1), now)
+
+      osc.connect(filter)
+      filter.connect(gain)
+      gain.connect(this.bgMusicGain!)
+
+      osc.start(now)
+      return osc
+    })
+  }
+
+  /**
+   * Dynamically duck background music during important technical explanations
+   */
+  public duckCorporateMusic(duckLevel = 0.04) {
+    if (!this.ctx || !this.bgMusicGain || !this.bgMusicPlaying) return
+    const now = this.ctx.currentTime
+    this.bgMusicGain.gain.cancelScheduledValues(now)
+    this.bgMusicGain.gain.setTargetAtTime(duckLevel, now, 0.4)
+  }
+
+  /**
+   * Restore background music volume
+   */
+  public restoreCorporateMusic(targetVolume = 0.10) {
+    if (!this.ctx || !this.bgMusicGain || !this.bgMusicPlaying) return
+    const now = this.ctx.currentTime
+    this.bgMusicGain.gain.cancelScheduledValues(now)
+    this.bgMusicGain.gain.setTargetAtTime(targetVolume, now, 0.5)
+  }
+
+  /**
+   * Smooth fade-out of corporate background music
+   */
+  public stopCorporateMusic() {
+    if (!this.ctx || !this.bgMusicGain || !this.bgMusicPlaying) return
+    const now = this.ctx.currentTime
+    this.bgMusicGain.gain.cancelScheduledValues(now)
+    this.bgMusicGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2)
+
+    setTimeout(() => {
+      this.bgMusicOscs.forEach((osc) => {
+        try {
+          osc.stop()
+          osc.disconnect()
+        } catch {
+          // ignore
+        }
+      })
+      this.bgMusicOscs = []
+      this.bgMusicPlaying = false
+      if (this.bgMusicTimer) clearTimeout(this.bgMusicTimer)
+    }, 1300)
+  }
+
   public playAmbient() {
     this.initContext()
     if (!this.ctx || !this.masterGain || this.isPlaying) return
@@ -34,12 +129,10 @@ class AudioEngine {
     this.isPlaying = true
     const now = this.ctx.currentTime
 
-    // Fade in master volume
     this.masterGain.gain.cancelScheduledValues(now)
     this.masterGain.gain.setValueAtTime(0.001, now)
     this.masterGain.gain.exponentialRampToValueAtTime(0.18, now + 3)
 
-    // Cinematic chord frequencies: D minor 9th (D2, A2, F3, C4, E4)
     const freqs = [73.42, 110.0, 174.61, 261.63, 329.63]
 
     this.oscillators = freqs.map((freq, i) => {
@@ -50,7 +143,6 @@ class AudioEngine {
       osc.type = i % 2 === 0 ? 'sine' : 'triangle'
       osc.frequency.setValueAtTime(freq, now)
 
-      // Slow organic detune / chorus
       const lfo = this.ctx!.createOscillator()
       const lfoGain = this.ctx!.createGain()
       lfo.frequency.value = 0.1 + i * 0.05
@@ -58,7 +150,6 @@ class AudioEngine {
       lfo.connect(osc.detune)
       lfo.start(now)
 
-      // Low pass filter
       filter.type = 'lowpass'
       filter.frequency.setValueAtTime(450 + i * 120, now)
 
@@ -99,7 +190,6 @@ class AudioEngine {
     if (!this.ctx) return
     const now = this.ctx.currentTime
 
-    // Starter motor whir / spark
     const starterOsc = this.ctx.createOscillator()
     const starterGain = this.ctx.createGain()
     starterOsc.type = 'sawtooth'
@@ -114,7 +204,6 @@ class AudioEngine {
     starterOsc.start(now)
     starterOsc.stop(now + 0.4)
 
-    // Engine roar to life at t + 0.35
     setTimeout(() => {
       this.startEngine()
     }, 350)
@@ -147,7 +236,6 @@ class AudioEngine {
     if (!this.ctx || !this.engineOsc || !this.engineFilter || !this.engineGain) return
     const now = this.ctx.currentTime
 
-    // Target frequency ranges from 45Hz idle to 160Hz high rev
     const targetFreq = 45 + (speedKmH / 120) * 115 + (isAccelerating ? 15 : 0)
     const targetFilter = 180 + (speedKmH / 120) * 450 + (isAccelerating ? 80 : 0)
     const targetVolume = isAccelerating ? 0.12 : 0.07
