@@ -275,13 +275,13 @@ export default function JourneyHUD() {
               color: state.sunoPlayerOpen ? '#38bdf8' : '#ffffff',
               padding: 4,
             }}
-            title="Open Suno AI Music Soundtrack"
+            title="Portfolio Music Soundtrack"
           >
             <div style={{ height: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Music size={16} color={state.sunoPlayerOpen ? '#38bdf8' : '#ffffff'} />
             </div>
             <span style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 10, letterSpacing: '0.15em', marginTop: 3 }}>
-              suno
+              music
             </span>
           </button>
         </div>
