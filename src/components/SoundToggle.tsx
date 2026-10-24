@@ -11,9 +11,9 @@ interface Props {
 export default function SoundToggle({ enabled, onToggle }: Props) {
   const handleClick = () => {
     if (enabled) {
-      audioEngine.stopAmbient()
+      audioEngine.disable()
     } else {
-      audioEngine.playAmbient()
+      audioEngine.enable()
     }
     onToggle()
   }

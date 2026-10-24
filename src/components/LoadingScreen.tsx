@@ -51,9 +51,9 @@ export default function LoadingScreen({ onComplete }: Props) {
   }, [])
 
   const handleStart = () => {
-    // Play start sound chime and start ambient synth
+    // Enable unified audio engine (starts bg music, ambient, and engine together)
+    audioEngine.enable()
     audioEngine.playStartChime()
-    audioEngine.playAmbient()
 
     setIsDeparting(true)
     setAwardsVisible(false)

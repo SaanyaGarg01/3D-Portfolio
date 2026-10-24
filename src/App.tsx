@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 import { Compass, FileText } from 'lucide-react'
 import LoadingScreen from './components/LoadingScreen'
 import CustomCursor from './components/CustomCursor'
@@ -39,7 +39,7 @@ export default function App() {
   const handlePreloaderComplete = (soundChoice = true) => {
     setIsLoading(false)
     if (soundChoice) {
-      audioEngine.playAmbient()
+      audioEngine.enable()
       journeyStore.setState({ soundEnabled: true })
     }
   }

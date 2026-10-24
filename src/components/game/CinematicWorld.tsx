@@ -240,6 +240,22 @@ export default function CinematicWorld() {
           }
         }
 
+        // Determine audio zone from Z position for consistent atmospheric audio
+        const currentZ = zPosRef.current
+        let audioZone: 'clear' | 'mist' | 'rain' | 'sunrise' | 'tunnel' | 'bridge' = 'clear'
+        if (currentZ <= -1060 && currentZ >= -1180) {
+          audioZone = 'tunnel'
+        } else if (currentZ <= -1580 && currentZ >= -1740) {
+          audioZone = 'bridge'
+        } else if (currentZ < -2400 && currentZ >= -2750) {
+          audioZone = 'rain'
+        } else if (currentZ < -2100 && currentZ >= -2400) {
+          audioZone = 'mist'
+        } else if (currentZ < -2750) {
+          audioZone = 'clear' // sunrise zone, calm
+        }
+        audioEngine.setZone(audioZone)
+
         journeyStore.setState({
           progress: progressRef.current,
           distance: Math.round(distanceRef.current),

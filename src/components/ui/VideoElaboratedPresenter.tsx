@@ -159,7 +159,6 @@ export default function VideoElaboratedPresenter({
   const [isMuted, setIsMuted] = useState(true)
   const [activeChapterIndex, setActiveChapterIndex] = useState(0)
   const [showChapterDrawer, setShowChapterDrawer] = useState(false)
-  const [volume, setVolume] = useState(1.0)
 
   // Track video playback time and coordinate background music ducking
   const handleTimeUpdate = () => {
@@ -661,6 +660,32 @@ export default function VideoElaboratedPresenter({
                 </div>
               ))}
             </div>
+
+            {onExploreFullPortfolio && (
+              <button
+                onClick={onExploreFullPortfolio}
+                style={{
+                  marginTop: 10,
+                  width: '100%',
+                  padding: '7px 12px',
+                  borderRadius: 8,
+                  border: '1px solid rgba(56, 189, 248, 0.35)',
+                  background: 'rgba(56, 189, 248, 0.1)',
+                  color: '#38bdf8',
+                  fontSize: 11,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 6,
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                <span>Read Full Resume & Credentials</span>
+                <span>→</span>
+              </button>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

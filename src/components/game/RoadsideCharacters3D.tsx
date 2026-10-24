@@ -2,7 +2,8 @@ import { useRef, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Text } from '@react-three/drei'
 import * as THREE from 'three'
-import { journeyStore, type CharacterDialogue } from './journeyStore'
+import { journeyStore } from './journeyStore'
+import { audioEngine } from '../../utils/audio'
 
 interface RoadsideCharactersProps {
   bikePosition: [number, number, number]
@@ -68,7 +69,7 @@ const CHARACTERS: CharacterDefinition[] = [
 ]
 
 export default function RoadsideCharacters3D({ bikePosition }: RoadsideCharactersProps) {
-  const [bx, by, bz] = bikePosition
+  const [bx, , bz] = bikePosition
   const armRefs = useRef<{ [key: string]: THREE.Group | null }>({})
   const lastSpokenChar = useRef<string | null>(null)
 
@@ -99,6 +100,7 @@ export default function RoadsideCharacters3D({ bikePosition }: RoadsideCharacter
       if (dist < 8.5 && Math.abs(bz - char.position[2]) < 5.0) {
         if (lastSpokenChar.current !== char.id) {
           lastSpokenChar.current = char.id
+          audioEngine.playCharacterMeet()
           journeyStore.triggerDialogue({
             id: char.id,
             speaker: char.name,
@@ -120,6 +122,7 @@ export default function RoadsideCharacters3D({ bikePosition }: RoadsideCharacter
   })
 
   const handleCharacterClick = (char: CharacterDefinition) => {
+    audioEngine.playCharacterMeet()
     journeyStore.triggerDialogue({
       id: char.id,
       speaker: char.name,

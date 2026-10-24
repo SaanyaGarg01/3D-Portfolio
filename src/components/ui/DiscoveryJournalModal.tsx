@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { BookOpen, X, Zap, Users, Award, Sparkles, CheckCircle2 } from 'lucide-react'
+import { BookOpen, X, Zap, Users, Award, CheckCircle2 } from 'lucide-react'
 import { journeyStore, INNOVATION_SPARKS, type JourneyState } from '../game/journeyStore'
 import { RESUME_DATA } from '../game/resumeData'
 

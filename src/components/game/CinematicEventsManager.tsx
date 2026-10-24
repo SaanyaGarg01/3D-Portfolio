@@ -7,10 +7,10 @@ import { audioEngine } from '../../utils/audio'
 
 interface CinematicEventsManagerProps {
   bikePosition: [number, number, number]
-  speed: number
+  speed?: number
 }
 
-export default function CinematicEventsManager({ bikePosition, speed }: CinematicEventsManagerProps) {
+export default function CinematicEventsManager({ bikePosition }: CinematicEventsManagerProps) {
   const [bx, by, bz] = bikePosition
 
   // Spark burst particles
@@ -20,9 +20,6 @@ export default function CinematicEventsManager({ bikePosition, speed }: Cinemati
 
   // Last collected spark tracking to prevent double audio
   const lastTriggeredSpark = useRef<string | null>(null)
-
-  // Portal tunnel animated rings
-  const tunnelRingsGroupRef = useRef<THREE.Group>(null)
 
   // Headlight beam ref
   const headlightBeamRef = useRef<THREE.SpotLight>(null)
@@ -91,9 +88,7 @@ export default function CinematicEventsManager({ bikePosition, speed }: Cinemati
   }, [])
 
   // Check spark intersections & animate 60fps elements
-  useFrame((state, delta) => {
-    const time = state.clock.elapsedTime
-
+  useFrame((_state, delta) => {
     // 1. Check Collectible Sparks collision
     for (const spark of INNOVATION_SPARKS) {
       const dist = Math.hypot(bx - 0, bz - spark.zPos)
@@ -101,7 +96,7 @@ export default function CinematicEventsManager({ bikePosition, speed }: Cinemati
         if (lastTriggeredSpark.current !== spark.id) {
           lastTriggeredSpark.current = spark.id
           journeyStore.triggerSparkNotification(spark.name, spark.category)
-          audioEngine.playHoverBlip()
+          audioEngine.playSparkCollect()
           setBurstSpark({ x: 0, y: 1.2, z: spark.zPos, color: spark.color })
           burstProgress.current = 0
         }
@@ -148,7 +143,6 @@ export default function CinematicEventsManager({ bikePosition, speed }: Cinemati
 
   // Detect which bridge segments are illuminated based on bike Z (-1580 to -1740)
   const bridgeZ = -1660
-  const isCrossingBridge = bz <= -1580 && bz >= -1740
 
   return (
     <group>

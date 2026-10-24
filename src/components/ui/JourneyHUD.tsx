@@ -25,12 +25,10 @@ export default function JourneyHUD() {
 
   const handleToggleSound = () => {
     if (state.soundEnabled) {
-      audioEngine.stopAmbient()
-      audioEngine.stopEngine()
+      audioEngine.disable()
       journeyStore.setState({ soundEnabled: false })
     } else {
-      audioEngine.playAmbient()
-      audioEngine.startEngine()
+      audioEngine.enable()
       journeyStore.setState({ soundEnabled: true })
     }
   }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, FileText, Compass, ExternalLink } from 'lucide-react'
+import { ArrowRight, FileText, Compass } from 'lucide-react'
 import type { JourneyPhase } from '../game/types'
 import { audioEngine } from '../../utils/audio'
 import { RESUME_DATA } from '../game/resumeData'
@@ -75,9 +75,8 @@ export default function OpeningHeroOverlay({
   if (phase !== 'opening') return null
 
   const handleStart = () => {
-    audioEngine.playHoverBlip()
+    audioEngine.enable()
     audioEngine.playIgnitionSound()
-    audioEngine.playAmbient()
     onStartJourney()
   }
 

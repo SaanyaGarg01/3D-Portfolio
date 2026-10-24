@@ -16,12 +16,10 @@ export default function JourneyMenu() {
 
   const handleToggleSound = () => {
     if (jState.soundEnabled) {
-      audioEngine.stopAmbient()
-      audioEngine.stopEngine()
+      audioEngine.disable()
       journeyStore.setState({ soundEnabled: false })
     } else {
-      audioEngine.playAmbient()
-      audioEngine.startEngine()
+      audioEngine.enable()
       journeyStore.setState({ soundEnabled: true })
     }
   }

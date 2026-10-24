@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Compass, FileText, ArrowLeft } from 'lucide-react'
+import { Compass } from 'lucide-react'
 import Navigation from './Navigation'
 import ChapterHero from './chapters/ChapterHero'
 import ChapterAbout from './chapters/ChapterAbout'
