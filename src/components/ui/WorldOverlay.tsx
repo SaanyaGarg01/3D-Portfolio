@@ -1,70 +1,185 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ExternalLink, Mail, Phone, RotateCcw, Award, Briefcase, GraduationCap, Code, CheckCircle, Sparkles } from 'lucide-react'
 import { journeyStore, type JourneyState } from '../game/journeyStore'
 import { RESUME_DATA } from '../game/resumeData'
 
-function CategoryHeader({ icon: Icon, title, subtitle }: { icon: any; title: string; subtitle: string }) {
+function CategoryHeader({
+  icon: Icon,
+  title,
+  subtitle,
+  onClose,
+}: {
+  icon: any
+  title: string
+  subtitle: string
+  onClose?: () => void
+}) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+    <div>
+      {/* Mobile Bottom-Sheet Pull Handle (tap to dismiss) */}
       <div
+        className="mobile-card-drag-handle"
+        onClick={onClose}
+        title="Tap to dismiss banner"
         style={{
-          width: 34,
-          height: 34,
-          borderRadius: 8,
-          background: 'rgba(14, 165, 233, 0.15)',
-          border: '1px solid rgba(14, 165, 233, 0.35)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#38bdf8',
+          width: 38,
+          height: 4,
+          borderRadius: 2,
+          background: 'rgba(255, 255, 255, 0.45)',
+          margin: '0 auto 12px',
+          cursor: 'pointer',
         }}
-      >
-        <Icon size={17} />
-      </div>
-      <div>
-        <h2
-          style={{
-            fontFamily: '"Space Grotesk", sans-serif',
-            fontSize: 'clamp(18px, 1.8vw, 22px)',
-            fontWeight: 800,
-            margin: 0,
-            color: '#ffffff',
-            letterSpacing: '-0.02em',
-            textShadow: '0 2px 12px rgba(0, 0, 0, 0.85)',
-          }}
-        >
-          {title}
-        </h2>
-        <div
-          style={{
-            fontSize: 11.5,
-            color: '#38bdf8',
-            letterSpacing: '0.06em',
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            fontFamily: '"Space Grotesk", sans-serif',
-            marginTop: 2,
-          }}
-        >
-          {subtitle}
+      />
+
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div
+            style={{
+              width: 34,
+              height: 34,
+              borderRadius: 8,
+              background: 'rgba(14, 165, 233, 0.15)',
+              border: '1px solid rgba(14, 165, 233, 0.35)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#38bdf8',
+            }}
+          >
+            <Icon size={17} />
+          </div>
+          <div>
+            <h2
+              style={{
+                fontFamily: '"Space Grotesk", sans-serif',
+                fontSize: 'clamp(17px, 1.8vw, 22px)',
+                fontWeight: 800,
+                margin: 0,
+                color: '#ffffff',
+                letterSpacing: '-0.02em',
+                textShadow: '0 2px 12px rgba(0, 0, 0, 0.85)',
+              }}
+            >
+              {title}
+            </h2>
+            <div
+              style={{
+                fontSize: 11,
+                color: '#38bdf8',
+                letterSpacing: '0.06em',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                fontFamily: '"Space Grotesk", sans-serif',
+                marginTop: 2,
+              }}
+            >
+              {subtitle}
+            </div>
+          </div>
         </div>
+
+        {onClose && (
+          <button
+            onClick={onClose}
+            style={{
+              background: 'rgba(255, 255, 255, 0.12)',
+              border: '1px solid rgba(255, 255, 255, 0.25)',
+              borderRadius: '50%',
+              width: 30,
+              height: 30,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#ffffff',
+              cursor: 'pointer',
+              padding: 0,
+              fontSize: 13,
+              fontWeight: 700,
+              transition: 'background 0.2s',
+            }}
+            title="Dismiss banner"
+            aria-label="Close banner"
+          >
+            ✕
+          </button>
+        )}
       </div>
     </div>
   )
 }
 
+function ContinueFooter({
+  worldIndex,
+  onContinue,
+  onDismiss,
+}: {
+  worldIndex: number
+  onContinue: () => void
+  onDismiss: () => void
+}) {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: 14,
+        paddingTop: 10,
+        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+        gap: 8,
+      }}
+    >
+      <button
+        onClick={onDismiss}
+        style={{
+          background: 'none',
+          border: 'none',
+          color: '#94a3b8',
+          fontSize: 11.5,
+          cursor: 'pointer',
+          padding: '4px 6px',
+        }}
+      >
+        Dismiss
+      </button>
+      {worldIndex < 8 && (
+        <button
+          onClick={onContinue}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            padding: '6px 14px',
+            borderRadius: 8,
+            border: 'none',
+            background: 'linear-gradient(135deg, #0ea5e9, #0284c7)',
+            color: '#ffffff',
+            fontFamily: '"Space Grotesk", sans-serif',
+            fontSize: 11.5,
+            fontWeight: 700,
+            cursor: 'pointer',
+            boxShadow: '0 4px 14px rgba(14, 165, 233, 0.35)',
+          }}
+        >
+          Continue Ride 🏍️ →
+        </button>
+      )}
+    </div>
+  )
+}
+
 const cardStyle: React.CSSProperties = {
-  background: 'rgba(10, 15, 28, 0.92)',
+  background: 'rgba(10, 15, 28, 0.94)',
   backdropFilter: 'blur(32px)',
   WebkitBackdropFilter: 'blur(32px)',
   border: '1.5px solid rgba(56, 189, 248, 0.35)',
   borderRadius: 16,
-  padding: 'clamp(20px, 3vw, 28px)',
+  padding: 'clamp(16px, 2.5vw, 24px)',
   pointerEvents: 'auto',
   color: '#ffffff',
   boxShadow: '0 24px 70px rgba(0, 0, 0, 0.75), 0 0 35px rgba(56, 189, 248, 0.12)',
-  maxHeight: '74vh',
+  maxHeight: '72vh',
   overflowY: 'auto',
   fontFamily: '"Space Grotesk", sans-serif',
 }
@@ -72,6 +187,8 @@ const cardStyle: React.CSSProperties = {
 export default function WorldOverlay() {
   const [jState, setJState] = useState<JourneyState>(() => journeyStore.getState())
   const [activeInternship, setActiveInternship] = useState(0)
+  const [dismissedWorlds, setDismissedWorlds] = useState<number[]>([])
+  const touchStartY = useRef<number | null>(null)
 
   useEffect(() => {
     return journeyStore.subscribe(setJState)
@@ -81,35 +198,103 @@ export default function WorldOverlay() {
 
   const worldIndex = jState.activeWorldIndex
 
+  // If this world's banner has been manually dismissed by the user, don't show it
+  if (dismissedWorlds.includes(worldIndex)) return null
+
+  const handleDismiss = () => {
+    setDismissedWorlds((prev) => [...prev, worldIndex])
+  }
+
+  const handleContinue = () => {
+    handleDismiss()
+    journeyStore.nudgeForward(0.04)
+  }
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length > 0) {
+      touchStartY.current = e.touches[0].clientY
+    }
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartY.current === null) return
+    const touchEndY = e.changedTouches[0]?.clientY
+    if (touchEndY !== undefined) {
+      const diff = touchStartY.current - touchEndY
+      // Swipe up (diff > 50) -> ride forward and continue
+      if (diff > 50) {
+        handleContinue()
+      } else if (diff < -50) {
+        // Swipe down (diff < -50) -> dismiss banner
+        handleDismiss()
+      }
+    }
+    touchStartY.current = null
+  }
+
   return (
-    <div
-      style={{
-        position: 'fixed',
-        left: 'clamp(16px, 4vw, 48px)',
-        top: '18%',
-        width: 'min(460px, 90vw)',
-        maxHeight: '76vh',
-        zIndex: 30,
-        pointerEvents: 'none',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-      }}
-    >
-      <AnimatePresence mode="wait">
+    <>
+      <style>{`
+        @media (min-width: 769px) {
+          .mobile-card-drag-handle {
+            display: none !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .world-overlay-container {
+            left: 12px !important;
+            right: 12px !important;
+            width: auto !important;
+            top: auto !important;
+            bottom: 84px !important;
+            max-height: 52vh !important;
+          }
+          .world-overlay-card {
+            max-height: 52vh !important;
+            padding: 16px !important;
+          }
+          .mobile-card-drag-handle {
+            display: block !important;
+          }
+        }
+      `}</style>
+      <div
+        className="world-overlay-container"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        style={{
+          position: 'fixed',
+          left: 'clamp(16px, 4vw, 48px)',
+          top: '18%',
+          width: 'min(460px, 90vw)',
+          maxHeight: '76vh',
+          zIndex: 30,
+          pointerEvents: 'none',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
+        <AnimatePresence mode="wait">
         {/* =========================================================
             WORLD 1 · IDENTITY & PROFESSIONAL PROFILE
         ========================================================= */}
         {worldIndex === 1 && (
           <motion.div
             key="world-1"
+            className="world-overlay-card"
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             style={cardStyle}
           >
-            <CategoryHeader icon={Sparkles} title="About Saanya Garg" subtitle="FULL STACK DEVELOPER · B.TECH CSE" />
+            <CategoryHeader
+              icon={Sparkles}
+              title="About Saanya Garg"
+              subtitle="FULL STACK DEVELOPER · B.TECH CSE"
+              onClose={handleDismiss}
+            />
 
             <div style={{ fontSize: 13, lineHeight: 1.65, color: 'rgba(255, 255, 255, 0.9)' }}>
               <p style={{ margin: '0 0 10px' }}>
@@ -122,6 +307,8 @@ export default function WorldOverlay() {
                 Scroll forward to explore education, experience, projects, and achievements.
               </p>
             </div>
+
+            <ContinueFooter worldIndex={1} onContinue={handleContinue} onDismiss={handleDismiss} />
           </motion.div>
         )}
 
@@ -131,13 +318,19 @@ export default function WorldOverlay() {
         {worldIndex === 2 && (
           <motion.div
             key="world-2"
+            className="world-overlay-card"
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.4 }}
             style={cardStyle}
           >
-            <CategoryHeader icon={GraduationCap} title="Education" subtitle="ACADEMIC EXCELLENCE · 2023–2027" />
+            <CategoryHeader
+              icon={GraduationCap}
+              title="Education"
+              subtitle="ACADEMIC EXCELLENCE · 2023–2027"
+              onClose={handleDismiss}
+            />
 
             <div style={{ fontSize: 13, lineHeight: 1.65, color: 'rgba(255, 255, 255, 0.9)' }}>
               <div style={{ fontWeight: 700, fontSize: 15, color: '#ffffff', marginBottom: 2 }}>
@@ -173,6 +366,8 @@ export default function WorldOverlay() {
                 Scroll forward to explore professional internships.
               </p>
             </div>
+
+            <ContinueFooter worldIndex={2} onContinue={handleContinue} onDismiss={handleDismiss} />
           </motion.div>
         )}
 
@@ -182,13 +377,19 @@ export default function WorldOverlay() {
         {worldIndex === 3 && (
           <motion.div
             key="world-3"
+            className="world-overlay-card"
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.4 }}
             style={cardStyle}
           >
-            <CategoryHeader icon={Briefcase} title="Experience" subtitle="3 INDUSTRY FULL-STACK INTERNSHIPS" />
+            <CategoryHeader
+              icon={Briefcase}
+              title="Experience"
+              subtitle="3 INDUSTRY FULL-STACK INTERNSHIPS"
+              onClose={handleDismiss}
+            />
 
             {/* Company Tabs */}
             <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>
@@ -234,6 +435,8 @@ export default function WorldOverlay() {
                 </div>
               )
             })()}
+
+            <ContinueFooter worldIndex={3} onContinue={handleContinue} onDismiss={handleDismiss} />
           </motion.div>
         )}
 
@@ -243,13 +446,19 @@ export default function WorldOverlay() {
         {worldIndex === 4 && (
           <motion.div
             key="world-4"
+            className="world-overlay-card"
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.4 }}
             style={cardStyle}
           >
-            <CategoryHeader icon={Code} title="Featured Projects" subtitle="AI, SOCIAL IMPACT & ENTERPRISE" />
+            <CategoryHeader
+              icon={Code}
+              title="Featured Projects"
+              subtitle="AI, SOCIAL IMPACT & ENTERPRISE"
+              onClose={handleDismiss}
+            />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {RESUME_DATA.projects.map((proj, i) => (
@@ -289,6 +498,8 @@ export default function WorldOverlay() {
                 </div>
               ))}
             </div>
+
+            <ContinueFooter worldIndex={4} onContinue={handleContinue} onDismiss={handleDismiss} />
           </motion.div>
         )}
 
@@ -298,13 +509,19 @@ export default function WorldOverlay() {
         {worldIndex === 5 && (
           <motion.div
             key="world-5"
+            className="world-overlay-card"
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.4 }}
             style={cardStyle}
           >
-            <CategoryHeader icon={Award} title="Achievements" subtitle="HACKATHONS & INNOVATION AWARDS" />
+            <CategoryHeader
+              icon={Award}
+              title="Achievements"
+              subtitle="HACKATHONS & INNOVATION AWARDS"
+              onClose={handleDismiss}
+            />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {RESUME_DATA.achievements.map((ach, i) => (
@@ -327,6 +544,8 @@ export default function WorldOverlay() {
                 </div>
               ))}
             </div>
+
+            <ContinueFooter worldIndex={5} onContinue={handleContinue} onDismiss={handleDismiss} />
           </motion.div>
         )}
 
@@ -336,13 +555,19 @@ export default function WorldOverlay() {
         {worldIndex === 6 && (
           <motion.div
             key="world-6"
+            className="world-overlay-card"
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.4 }}
             style={cardStyle}
           >
-            <CategoryHeader icon={Code} title="Technical Arsenal" subtitle="LANGUAGES, CLOUD, DATABASES & TOOLS" />
+            <CategoryHeader
+              icon={Code}
+              title="Technical Arsenal"
+              subtitle="LANGUAGES, CLOUD, DATABASES & TOOLS"
+              onClose={handleDismiss}
+            />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, fontSize: 12 }}>
               <div>
@@ -372,6 +597,8 @@ export default function WorldOverlay() {
                 </div>
               </div>
             </div>
+
+            <ContinueFooter worldIndex={6} onContinue={handleContinue} onDismiss={handleDismiss} />
           </motion.div>
         )}
 
@@ -381,13 +608,19 @@ export default function WorldOverlay() {
         {worldIndex === 7 && (
           <motion.div
             key="world-7"
+            className="world-overlay-card"
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.4 }}
             style={cardStyle}
           >
-            <CategoryHeader icon={CheckCircle} title="Certifications" subtitle="INDUSTRY-RECOGNIZED CREDENTIALS" />
+            <CategoryHeader
+              icon={CheckCircle}
+              title="Certifications"
+              subtitle="INDUSTRY-RECOGNIZED CREDENTIALS"
+              onClose={handleDismiss}
+            />
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {RESUME_DATA.certifications.map((cert, i) => (
@@ -413,6 +646,8 @@ export default function WorldOverlay() {
                 </div>
               ))}
             </div>
+
+            <ContinueFooter worldIndex={7} onContinue={handleContinue} onDismiss={handleDismiss} />
           </motion.div>
         )}
 
@@ -422,13 +657,19 @@ export default function WorldOverlay() {
         {worldIndex === 8 && (
           <motion.div
             key="world-8"
+            className="world-overlay-card"
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.4 }}
             style={cardStyle}
           >
-            <CategoryHeader icon={Sparkles} title="Journey Complete" subtitle="HORIZON REACHED · SUMMARY OF ADVENTURE" />
+            <CategoryHeader
+              icon={Sparkles}
+              title="Journey Complete"
+              subtitle="HORIZON REACHED · SUMMARY OF ADVENTURE"
+              onClose={handleDismiss}
+            />
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 14 }}>
               <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 8, padding: '8px 4px', textAlign: 'center' }}>
@@ -581,5 +822,6 @@ export default function WorldOverlay() {
         )}
       </AnimatePresence>
     </div>
-  )
+  </>
+)
 }

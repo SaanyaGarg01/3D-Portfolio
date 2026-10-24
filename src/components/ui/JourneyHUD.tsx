@@ -21,6 +21,16 @@ export default function JourneyHUD() {
     }
   }, [state.activeSparkNotification])
 
+  // Auto-dismiss dialogue after 6.5s so it never stays stuck on mobile
+  useEffect(() => {
+    if (state.activeDialogue) {
+      const timer = setTimeout(() => {
+        journeyStore.dismissDialogue()
+      }, 6500)
+      return () => clearTimeout(timer)
+    }
+  }, [state.activeDialogue])
+
   if (state.phase === 'opening') return null
 
   const handleToggleSound = () => {
@@ -455,16 +465,32 @@ export default function JourneyHUD() {
         )}
       </AnimatePresence>
 
-      {/* Bottom Row: Controls Guide & Scroll Indicator */}
+      {/* Bottom Row: Controls Guide & Mobile Drive Controller */}
+      <style>{`
+        @media (min-width: 769px) {
+          .hud-mobile-controls, .hud-mobile-drive-btn {
+            display: none !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .hud-desktop-controls, .hud-desktop-scroll-pill {
+            display: none !important;
+          }
+        }
+      `}</style>
+
       <div
         style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           width: '100%',
+          pointerEvents: 'none',
         }}
       >
+        {/* Desktop Controls Text */}
         <div
+          className="hud-desktop-controls"
           style={{
             fontSize: 10,
             color: 'rgba(255,255,255,0.45)',
@@ -474,27 +500,86 @@ export default function JourneyHUD() {
           <span>Use <strong>Scroll</strong> or <strong>W/S</strong> to ride · <strong>A/D</strong> to steer</span>
         </div>
 
+        {/* Mobile Controls Text */}
         <div
+          className="hud-mobile-controls"
           style={{
-            padding: '6px 14px',
-            background: 'rgba(0, 0, 0, 0.35)',
-            backdropFilter: 'blur(8px)',
-            borderRadius: 6,
+            fontSize: 10.5,
+            color: 'rgba(255,255,255,0.7)',
+            fontFamily: '"Space Grotesk", sans-serif',
             display: 'flex',
             alignItems: 'center',
             gap: 6,
           }}
         >
-          <span
+          <span>Swipe or tap <strong>DRIVE</strong></span>
+        </div>
+
+        {/* Action Button Container */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, pointerEvents: 'auto' }}>
+          {/* Mobile Interactive Drive Button */}
+          <motion.button
+            className="hud-mobile-drive-btn"
+            whileTap={{ scale: 0.93 }}
+            onTouchStart={(e) => {
+              e.stopPropagation()
+              journeyStore.setAccelerating(true)
+            }}
+            onTouchEnd={(e) => {
+              e.stopPropagation()
+              journeyStore.setAccelerating(false)
+            }}
+            onMouseDown={() => journeyStore.setAccelerating(true)}
+            onMouseUp={() => journeyStore.setAccelerating(false)}
+            onMouseLeave={() => journeyStore.setAccelerating(false)}
+            onClick={() => journeyStore.nudgeForward(0.04)}
             style={{
-              fontFamily: '"Zen Dots", sans-serif',
-              fontSize: 11,
-              letterSpacing: '0.2em',
+              padding: '8px 18px',
+              background: 'linear-gradient(135deg, #0ea5e9, #0284c7)',
+              border: '1.5px solid rgba(255,255,255,0.4)',
+              borderRadius: 20,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
               color: '#ffffff',
+              fontFamily: '"Space Grotesk", sans-serif',
+              fontSize: 11.5,
+              fontWeight: 800,
+              cursor: 'pointer',
+              boxShadow: '0 4px 18px rgba(14, 165, 233, 0.45)',
+              touchAction: 'none',
+              userSelect: 'none',
+              WebkitUserSelect: 'none',
             }}
           >
-            SCR●LL
-          </span>
+            <span>HOLD TO DRIVE</span>
+            <span>🏍️</span>
+          </motion.button>
+
+          {/* Desktop Scroll Indicator */}
+          <div
+            className="hud-desktop-scroll-pill"
+            style={{
+              padding: '6px 14px',
+              background: 'rgba(0, 0, 0, 0.35)',
+              backdropFilter: 'blur(8px)',
+              borderRadius: 6,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+            }}
+          >
+            <span
+              style={{
+                fontFamily: '"Zen Dots", sans-serif',
+                fontSize: 11,
+                letterSpacing: '0.2em',
+                color: '#ffffff',
+              }}
+            >
+              SCR●LL
+            </span>
+          </div>
         </div>
       </div>
     </div>

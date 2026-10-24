@@ -269,6 +269,18 @@ class JourneyStore {
     })
   }
 
+  public setAccelerating(isAccelerating: boolean) {
+    this.setState({ isAccelerating })
+  }
+
+  public nudgeForward(amount: number = 0.03) {
+    if (this.state.phase === 'opening') {
+      this.setState({ phase: 'riding', mountingProgress: 1 })
+    }
+    const newProg = Math.min(1, this.state.progress + amount)
+    this.setProgress(newProg)
+  }
+
   public toggleSunoPlayer(open?: boolean) {
     this.setState({
       sunoPlayerOpen: open !== undefined ? open : !this.state.sunoPlayerOpen,

@@ -115,8 +115,11 @@ export default function CinematicWorld() {
         }
         if (phaseRef.current === 'mounting') return
 
-        const touchImpulse = (diff / 20) * 1.5
-        velocityRef.current = THREE.MathUtils.clamp(velocityRef.current + touchImpulse, -5, 24)
+        // Direct velocity impulse from drag
+        // Drag up (positive diff) -> accelerate forward
+        // Drag down (negative diff) -> brake / reverse
+        const touchImpulse = (diff / 10) * 3.2
+        velocityRef.current = THREE.MathUtils.clamp(velocityRef.current + touchImpulse, -5, 26)
       }
     }
 
@@ -164,9 +167,10 @@ export default function CinematicWorld() {
       const isLeft = keys['a'] || keys['arrowleft']
       const isRight = keys['d'] || keys['arrowright']
       const isBraking = keys[' '] || isDown
+      const isMobileDrive = journeyStore.getState().isAccelerating
 
-      // Forward acceleration from 'W' key
-      if (isUp) {
+      // Forward acceleration from 'W' key or mobile drive button
+      if (isUp || isMobileDrive) {
         const targetV = 18.0 // ~65 km/h
         velocityRef.current = THREE.MathUtils.lerp(velocityRef.current, targetV, delta * 3.5)
       }
@@ -174,9 +178,9 @@ export default function CinematicWorld() {
       // Braking
       if (isBraking) {
         velocityRef.current = THREE.MathUtils.lerp(velocityRef.current, 0, delta * 8.0)
-      } else if (!isUp) {
+      } else if (!isUp && !isMobileDrive) {
         // Natural rolling resistance and aerodynamic drag (smooth glide)
-        velocityRef.current = THREE.MathUtils.lerp(velocityRef.current, 0, delta * 1.8)
+        velocityRef.current = THREE.MathUtils.lerp(velocityRef.current, 0, delta * 1.0)
       }
 
       // Cut off near zero to rest
@@ -220,7 +224,7 @@ export default function CinematicWorld() {
       const speedKmH = Math.round(velocityRef.current * 3.6)
 
       // Synchronize engine audio
-      audioEngine.setEngineSpeed(speedKmH, isUp || velocityRef.current > 2)
+      audioEngine.setEngineSpeed(speedKmH, isUp || isMobileDrive || velocityRef.current > 2)
 
       // Check for arrival at the end of the journey
       if (progressRef.current >= 0.995) {
