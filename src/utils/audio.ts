@@ -46,6 +46,8 @@ class AudioEngine {
   private bgMusicPlaying = false
   private melodyInterval: ReturnType<typeof setInterval> | null = null
   private chordIndex = 0
+  private customAudio: HTMLAudioElement | null = null
+  private customAudioLoaded = false
 
   // Ambient atmosphere state
   private ambientOscs: OscillatorNode[] = []
@@ -147,6 +149,13 @@ class AudioEngine {
     // Auto-start layers
     this.startBackgroundMusic()
     this.startAmbient()
+
+    if (this.customAudio && this.customAudioLoaded) {
+      this.customAudio.volume = 0.35
+      this.customAudio.play().catch(() => {})
+    } else {
+      this.initCustomAudio()
+    }
   }
 
   /**
@@ -165,12 +174,37 @@ class AudioEngine {
       this.masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5)
     }
 
+    if (this.customAudio) {
+      this.customAudio.pause()
+    }
+
     // Stop everything after fade
     setTimeout(() => {
       this.stopBackgroundMusic()
       this.stopAmbient()
       this.stopEngine()
     }, 600)
+  }
+
+  public initCustomAudio(src: string = '/music.mp3') {
+    if (typeof window === 'undefined') return
+    try {
+      if (!this.customAudio) {
+        this.customAudio = new Audio(src)
+        this.customAudio.loop = true
+        this.customAudio.crossOrigin = 'anonymous'
+        this.customAudio.volume = 0.35
+        this.customAudio.addEventListener('canplaythrough', () => {
+          this.customAudioLoaded = true
+          if (this.enabled) {
+            this.customAudio?.play().catch(() => {})
+          }
+        })
+        this.customAudio.addEventListener('error', () => {
+          this.customAudioLoaded = false
+        })
+      }
+    } catch {}
   }
 
   // ── Background Music Layer ──────────────────────

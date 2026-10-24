@@ -10,6 +10,7 @@ import WorldOverlay from './components/ui/WorldOverlay'
 import JourneyMenu from './components/ui/JourneyMenu'
 import EditorialPortfolio from './components/EditorialPortfolio'
 import DiscoveryJournalModal from './components/ui/DiscoveryJournalModal'
+import SunoMusicPlayer from './components/ui/SunoMusicPlayer'
 import NoWebGL from './components/NoWebGL'
 import { journeyStore, type JourneyState } from './components/game/journeyStore'
 import { audioEngine } from './utils/audio'
@@ -159,6 +160,9 @@ export default function App() {
 
               {/* Discovery Journal Modal */}
               <DiscoveryJournalModal />
+
+              {/* Suno Interactive Music Player Widget */}
+              <SunoMusicPlayer />
             </div>
           )}
 

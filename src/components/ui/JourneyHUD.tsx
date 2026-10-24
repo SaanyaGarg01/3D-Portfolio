@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, Compass, Zap, CloudRain, Sun, Cloud, ArrowRight } from 'lucide-react'
+import { Sparkles, Compass, Zap, CloudRain, Sun, Cloud, ArrowRight, Music } from 'lucide-react'
 import { journeyStore, type JourneyState } from '../game/journeyStore'
 import { audioEngine } from '../../utils/audio'
 
@@ -248,6 +248,30 @@ export default function JourneyHUD() {
             </div>
             <span style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 10, letterSpacing: '0.15em', marginTop: 3 }}>
               sound
+            </span>
+          </button>
+
+          {/* Suno Soundtrack Quick Trigger */}
+          <button
+            onClick={() => journeyStore.toggleSunoPlayer()}
+            style={{
+              background: 'none',
+              border: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 4,
+              cursor: 'pointer',
+              color: state.sunoPlayerOpen ? '#38bdf8' : '#ffffff',
+              padding: 4,
+            }}
+            title="Open Suno AI Music Soundtrack"
+          >
+            <div style={{ height: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Music size={16} color={state.sunoPlayerOpen ? '#38bdf8' : '#ffffff'} />
+            </div>
+            <span style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 10, letterSpacing: '0.15em', marginTop: 3 }}>
+              suno
             </span>
           </button>
         </div>

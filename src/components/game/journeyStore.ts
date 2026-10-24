@@ -54,6 +54,7 @@ export interface JourneyState {
   journalOpen: boolean
   discoveredCharacters: string[]
   byteMood: 'idle' | 'wave' | 'celebrate' | 'talking'
+  sunoPlayerOpen: boolean
 }
 
 const initialState: JourneyState = {
@@ -81,6 +82,7 @@ const initialState: JourneyState = {
   journalOpen: false,
   discoveredCharacters: [],
   byteMood: 'idle',
+  sunoPlayerOpen: false,
 }
 
 class JourneyStore {
@@ -263,6 +265,13 @@ class JourneyStore {
       journalOpen: false,
       discoveredCharacters: [],
       byteMood: 'idle',
+      sunoPlayerOpen: false,
+    })
+  }
+
+  public toggleSunoPlayer(open?: boolean) {
+    this.setState({
+      sunoPlayerOpen: open !== undefined ? open : !this.state.sunoPlayerOpen,
     })
   }
 
