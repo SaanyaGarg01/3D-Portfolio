@@ -146,11 +146,10 @@ class AudioEngine {
       this.masterGain.gain.exponentialRampToValueAtTime(1.0, now + 0.6)
     }
 
-    // Default music is Suno soundtrack exclusively (no synth chords)
-    this.startAmbient()
+    // Default music is Suno soundtrack exclusively (no synth chords or drone pads)
     this.initCustomAudio()
     if (this.customAudio) {
-      this.customAudio.volume = 0.55
+      this.customAudio.volume = 0.65
       this.customAudio.play().catch(() => {})
     }
   }
@@ -182,23 +181,32 @@ class AudioEngine {
     }, 600)
   }
 
-  public initCustomAudio(src: string = '/music.mp3') {
+  public initCustomAudio(preferredSrc?: string) {
     if (typeof window === 'undefined') return
     try {
       if (!this.customAudio) {
-        this.customAudio = new Audio(src)
+        this.customAudio = new Audio()
         this.customAudio.loop = true
-        this.customAudio.volume = 0.55
+        this.customAudio.volume = 0.65
+
+        const canPlayWebm = this.customAudio.canPlayType('audio/webm; codecs="opus"')
+        const src = preferredSrc || (canPlayWebm ? '/music.webm' : '/music.mp3')
+        this.customAudio.src = src
+
         this.customAudio.addEventListener('canplaythrough', () => {
           this.customAudioLoaded = true
           if (this.enabled) {
             this.customAudio?.play().catch(() => {})
           }
         })
+
         this.customAudio.addEventListener('error', () => {
-          if (src === '/music.mp3') {
-            this.customAudio = null
-            this.initCustomAudio('/saanya_theme.m4a')
+          if (this.customAudio && this.customAudio.src.includes('music.webm')) {
+            this.customAudio.src = '/music.mp3'
+            this.customAudio.load()
+            if (this.enabled) {
+              this.customAudio.play().catch(() => {})
+            }
           }
         })
       }
@@ -452,38 +460,9 @@ class AudioEngine {
     const now = this.ctx.currentTime
     this.ambientGain.gain.cancelScheduledValues(now)
     this.ambientGain.gain.setValueAtTime(0.0001, now)
-    this.ambientGain.gain.exponentialRampToValueAtTime(0.14, now + 2.5)
 
-    // Ethereal pad: fifths with slow LFO modulation
-    const padFreqs = [73.42, 110.0, 146.83, 220.0]
-    this.ambientOscs = padFreqs.map((freq, i) => {
-      const osc = this.ctx!.createOscillator()
-      const gain = this.ctx!.createGain()
-      const filter = this.ctx!.createBiquadFilter()
-
-      osc.type = i % 2 === 0 ? 'sine' : 'triangle'
-      osc.frequency.setValueAtTime(freq, now)
-
-      const lfo = this.ctx!.createOscillator()
-      const lfoGain = this.ctx!.createGain()
-      lfo.frequency.value = 0.06 + i * 0.03
-      lfoGain.gain.value = 2.0
-      lfo.connect(lfoGain)
-      lfoGain.connect(osc.detune)
-      lfo.start(now)
-
-      filter.type = 'lowpass'
-      filter.frequency.setValueAtTime(350 + i * 100, now)
-
-      gain.gain.setValueAtTime(0.06 / (i + 1), now)
-
-      osc.connect(filter)
-      filter.connect(gain)
-      gain.connect(this.ambientGain!)
-      osc.start(now)
-
-      return osc
-    })
+    // No synth drone pads — all music is exclusively the Suno soundtrack!
+    this.ambientOscs = []
   }
 
   // Legacy aliases
