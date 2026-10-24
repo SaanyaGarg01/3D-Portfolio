@@ -82,7 +82,7 @@ const initialState: JourneyState = {
   journalOpen: false,
   discoveredCharacters: [],
   byteMood: 'idle',
-  sunoPlayerOpen: true,
+  sunoPlayerOpen: false,
 }
 
 class JourneyStore {

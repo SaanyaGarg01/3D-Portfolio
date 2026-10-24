@@ -215,9 +215,9 @@ export default function JourneyHUD() {
           </button>
 
 
-          {/* Suno Soundtrack Quick Trigger */}
+          {/* Background Music Toggle */}
           <button
-            onClick={() => journeyStore.toggleSunoPlayer()}
+            onClick={() => audioEngine.toggleMusic()}
             style={{
               background: 'none',
               border: 'none',
@@ -226,13 +226,13 @@ export default function JourneyHUD() {
               alignItems: 'center',
               gap: 4,
               cursor: 'pointer',
-              color: state.sunoPlayerOpen ? '#38bdf8' : '#ffffff',
+              color: '#38bdf8',
               padding: 4,
             }}
-            title="Portfolio Music Soundtrack"
+            title="Toggle Portfolio Soundtrack"
           >
             <div style={{ height: 16, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Music size={16} color={state.sunoPlayerOpen ? '#38bdf8' : '#ffffff'} />
+              <Music size={16} color="#38bdf8" />
             </div>
             <span style={{ fontFamily: '"Space Grotesk", sans-serif', fontSize: 10, letterSpacing: '0.15em', marginTop: 3 }}>
               music

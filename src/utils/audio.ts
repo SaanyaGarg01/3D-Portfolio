@@ -210,18 +210,44 @@ class AudioEngine {
 
   public setupAutoUnlock() {
     if (typeof window === 'undefined') return
+    // Attempt auto-play immediately without waiting
+    this.enable()
+
     const unlock = () => {
       this.enable()
+      if (this.customAudio && this.customAudio.paused) {
+        this.customAudio.play().catch(() => {})
+      }
     }
     window.addEventListener('click', unlock, { once: true, passive: true })
     window.addEventListener('touchstart', unlock, { once: true, passive: true })
     window.addEventListener('keydown', unlock, { once: true, passive: true })
+    window.addEventListener('pointerdown', unlock, { once: true, passive: true })
   }
 
-  // ── Background Music Layer ──────────────────────
-  // Warm piano-like chords that evolve through a progression,
-  // with a gentle arpeggio melody layer on top.
+  public isMusicPlaying(): boolean {
+    return !!(this.customAudio && !this.customAudio.paused)
+  }
 
+  public toggleMusic(): boolean {
+    if (!this.customAudio) {
+      this.initCustomAudio()
+    }
+    if (this.customAudio) {
+      if (this.customAudio.paused) {
+        this.enabled = true
+        this.customAudio.volume = 0.55
+        this.customAudio.play().catch(() => {})
+        return true
+      } else {
+        this.customAudio.pause()
+        return false
+      }
+    }
+    return false
+  }
+
+  // ── Background Music Layer (Suno Soundtrack) ─────
   public startBackgroundMusic() {
     this.initCustomAudio()
     if (this.customAudio && this.enabled) {

@@ -41,13 +41,12 @@ export default function App() {
   const handlePreloaderComplete = (_soundChoice = true) => {
     setIsLoading(false)
     audioEngine.enable()
-    journeyStore.setState({ soundEnabled: true, sunoPlayerOpen: true })
+    journeyStore.setState({ soundEnabled: true })
   }
 
   const handleStartJourney = () => {
     audioEngine.enable()
     journeyStore.startMounting()
-    journeyStore.toggleSunoPlayer(true)
   }
 
   if (!webglSupported) {
