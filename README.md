@@ -1,6 +1,6 @@
 # Saanya Garg — 3D Portfolio
 
-A cinematic, immersive 3D developer portfolio built with React, Three.js, GSAP, and Framer Motion. Inspired by the visual ambition of [sebastien-lempens.com](https://sebastien-lempens.com/).
+A cinematic, immersive 3D developer portfolio built with React, Three.js, GSAP, and Framer Motion. 
 
 ## ✨ Features
 
